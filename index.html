@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        /* Minimalist "Loading" UI */
+        body { 
+            background-color: #000; 
+            color: #fff; 
+            font-family: -apple-system, sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            text-align: center;
+        }
+        .container { padding: 20px; }
+        .btn { 
+            background: #ff0000; 
+            color: white; 
+            border: none; 
+            padding: 16px 32px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .loader {
+            border: 4px solid #333;
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="loader"></div>
+        <p>Checking link safety...</p>
+        <button class="btn" onclick="launchRickRoll()">Continue to Content</button>
+    </div>
+
+    <script>
+        function launchRickRoll() {
+            const videoId = "QDia3e12czc"; // Your specific video ID
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // 1. ANDROID: Break out of Instagram using Intent
+            if (/android/i.test(userAgent)) {
+                window.location.href = `intent://www.youtube.com/watch?v=${videoId}#Intent;package=com.google.android.youtube;scheme=https;end`;
+            } 
+            
+            // 2. iOS: Attempt Deep Link with Web Fallback
+            else if (/iPad|iPhone|iPod/.test(userAgent)) {
+                // Try to open the app directly
+                window.location.href = `youtube://www.youtube.com/watch?v=${videoId}`;
+                
+                // If they don't have the app or it fails, go to browser after 500ms
+                setTimeout(() => {
+                    window.location.href = `https://www.youtube.com/watch?v=${videoId}&autoplay=1`;
+                }, 500);
+            } 
+            
+            // 3. DESKTOP/OTHER: Standard YouTube redirect
+            else {
+                window.location.href = `https://www.youtube.com/watch?v=${videoId}&autoplay=1`;
+            }
+        }
+    </script>
+</body>
+</html>
