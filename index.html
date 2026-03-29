@@ -3,79 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>Project Workspace | Meraj Rabbani</title>
+    <meta name="description" content="Viewing hosted media for Class 11 computer science project.">
     <style>
-        /* Minimalist "Loading" UI */
-        body { 
-            background-color: #000; 
-            color: #fff; 
-            font-family: -apple-system, sans-serif; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            margin: 0; 
-            text-align: center;
-        }
-        .container { padding: 20px; }
-        .btn { 
-            background: #ff0000; 
-            color: white; 
-            border: none; 
-            padding: 16px 32px; 
-            font-size: 18px; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            margin-top: 20px; 
-            transition: transform 0.2s;
-        }
-        .btn:active { transform: scale(0.95); }
-        .loader {
-            border: 4px solid #333;
-            border-top: 4px solid #fff;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { margin: 0; background: #0b0e14; color: #fff; font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        #interface { text-align: center; z-index: 10; width: 90%; max-width: 400px; }
+        /* The giant button for the user gesture */
+        .giant-btn { background: #ff0000; color: white; border: none; padding: 25px 50px; font-size: 1.5rem; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4); transition: transform 0.1s; }
+        .giant-btn:active { transform: scale(0.96); }
+        video { display: none; position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; object-fit: cover; }
+        .status { margin-bottom: 20px; font-size: 0.9rem; color: #888; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="loader"></div>
-        <p>Checking link safety...</p>
-        <button class="btn" onclick="launchRickRoll()">Continue to Content</button>
+    <div id="interface">
+        <div class="status">Source: rick.mp4 • Status: Ready</div>
+        <button class="giant-btn" onclick="blast()">CONTINUE TO CONTENT</button>
     </div>
 
-    <script>
-        function launchRickRoll() {
-            const videoId = "QDia3e12czc"; // Your specific video ID
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    <video id="player" playsinline>
+        <source src="rick.mp4" type="video/mp4">
+    </video>
 
-            // 1. ANDROID: Break out of Instagram using Intent
-            if (/android/i.test(userAgent)) {
-                window.location.href = `intent://www.youtube.com/watch?v=${videoId}#Intent;package=com.google.android.youtube;scheme=https;end`;
-            } 
+    <script>
+        function blast() {
+            const vid = document.getElementById("player");
+            const ui = document.getElementById("interface");
             
-            // 2. iOS: Attempt Deep Link with Web Fallback
-            else if (/iPad|iPhone|iPod/.test(userAgent)) {
-                // Try to open the app directly
-                window.location.href = `youtube://www.youtube.com/watch?v=${videoId}`;
-                
-                // If they don't have the app or it fails, go to browser after 500ms
-                setTimeout(() => {
-                    window.location.href = `https://www.youtube.com/watch?v=${videoId}&autoplay=1`;
-                }, 500);
-            } 
+            // Hide the UI
+            ui.style.display = "none";
             
-            // 3. DESKTOP/OTHER: Standard YouTube redirect
-            else {
-                window.location.href = `https://www.youtube.com/watch?v=${videoId}&autoplay=1`;
-            }
+            // Reveal and Play video with sound
+            vid.style.display = "block";
+            vid.muted = false; // Unmutes the video
+            vid.play().catch(e => {
+                console.error("Playback failed:", e);
+                // Fallback if browser still blocks it
+                vid.muted = true;
+                vid.play();
+            });
         }
     </script>
 </body>
